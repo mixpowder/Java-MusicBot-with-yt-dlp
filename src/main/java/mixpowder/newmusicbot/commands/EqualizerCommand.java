@@ -9,11 +9,14 @@ public class EqualizerCommand extends Command {
 		if(Command.start) {
 			if(args.length == 2){
 				event.getChannel().asTextChannel().sendMessage("現在の設定: " + this.presets(args[1])).queue();
+				Command.musicManager.player.setFilterFactory(Command.eqSettings);
 			}else {
 				event.getChannel().asTextChannel().sendMessage("引数がおかしいです").queue();
+				event.getChannel().asTextChannel().sendMessage("!eq [bass || normal || treble]").queue();
+
 			}
 
-			Command.musicManager.player.setFilterFactory(Command.eqSettings);
+
 		}else {
 			event.getChannel().asTextChannel().sendMessage("まずはスタートしてね").queue();
 		}
@@ -41,7 +44,7 @@ public class EqualizerCommand extends Command {
 			}
 			presets = "flat";
 
-		}else if(name.equals("reble")) {
+		}else if(name.equals("treble")) {
 
 			for (int i = 0; i < 15; i++) {
 				float distance = Math.abs(i - 7);
@@ -50,7 +53,9 @@ public class EqualizerCommand extends Command {
 			    Command.eqSettings.setGain(i, gain);
 			}
 
-			presets = "vocal";
+			presets = "treble";
+
+		}else {
 
 		}
 
