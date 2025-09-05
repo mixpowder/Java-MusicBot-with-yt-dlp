@@ -24,10 +24,11 @@ public class PlayCommand extends Command{
 		}
 
 
-		if (!start) {
+		if (!Command.start) {
 			setAudioSource();
 			joinVoiceChannel(guild, voiceChannel);
-			start = true;
+			Command.start = true;
+
 		}
 
 		playerManager.loadItem(url, new LoadResultHandler(musicManager, textChannel));

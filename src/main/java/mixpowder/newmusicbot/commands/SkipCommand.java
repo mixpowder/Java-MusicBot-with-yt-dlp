@@ -2,15 +2,12 @@ package mixpowder.newmusicbot.commands;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class LeaveCommand extends Command {
+public class SkipCommand extends Command {
 
 	@Override
 	public void execute(MessageReceivedEvent event, String[] args) {
 		if(Command.start) {
-			Command.leaveVoiceChannel();
-			Command.start = false;
-		}else {
-			event.getChannel().asTextChannel().sendMessage("まずはスタートしてね").queue();
+			Command.musicManager.scheduler.nextTrack();
 		}
 	}
 

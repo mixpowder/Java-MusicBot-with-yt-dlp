@@ -4,8 +4,10 @@ import java.util.Map;
 
 import mixpowder.newmusicbot.commands.Command;
 import mixpowder.newmusicbot.commands.DownloadCommand;
+import mixpowder.newmusicbot.commands.EqualizerCommand;
 import mixpowder.newmusicbot.commands.LeaveCommand;
 import mixpowder.newmusicbot.commands.PlayCommand;
+import mixpowder.newmusicbot.commands.SkipCommand;
 import mixpowder.newmusicbot.commands.StopCommand;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -18,9 +20,11 @@ public class MusicBot extends ListenerAdapter {
 
 	private Map<String, Command> commands = new HashMap<>();
 
+	private String token = "";
+
 	public MusicBot() {
 
-		JDABuilder.createDefault("")
+		JDABuilder.createDefault(token)
 				.enableIntents(GatewayIntent.GUILD_VOICE_STATES)
 				.enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT)
 				.enableCache(CacheFlag.VOICE_STATE)
@@ -30,8 +34,10 @@ public class MusicBot extends ListenerAdapter {
 
 
 		commands.put("!play", new PlayCommand());
+		commands.put("!skip", new SkipCommand());
 		commands.put("!stop", new StopCommand());
 		commands.put("!download", new DownloadCommand());
+		commands.put("!eq", new EqualizerCommand());
 		commands.put("!leave", new LeaveCommand());
 	}
 

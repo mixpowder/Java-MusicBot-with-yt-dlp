@@ -1,5 +1,6 @@
 package mixpowder.newmusicbot.commands;
 
+import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -11,28 +12,36 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public abstract class Command {
 
-	protected AudioPlayerManager playerManager;
-	protected GuildMusicManager musicManager;
-	protected boolean start = false;
+	protected static AudioPlayerManager playerManager;
+	protected static GuildMusicManager musicManager;
+	protected static boolean start = false;
 
-	private Guild joiningVoiceChannel;
+	protected static EqualizerFactory eqSettings;
+
+	private static Guild joiningVoiceChannel;
+
+
 
 	public abstract void execute(MessageReceivedEvent event, String[] args);
 
 	protected void joinVoiceChannel(Guild guild, VoiceChannel voiceChannel) {
-		this.joiningVoiceChannel = guild;
+		Command.joiningVoiceChannel = guild;
 		guild.getAudioManager().openAudioConnection(voiceChannel);
-		this.musicManager = new GuildMusicManager(playerManager);
-		this.musicManager.player.setVolume(5);
+		Command.musicManager = new GuildMusicManager(playerManager);
+		Command.musicManager.player.setVolume(5);
+
+		eqSettings = new EqualizerFactory();
+
 		guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
 	}
 
-	protected void leaveVoiceChannel() {
-		this.joiningVoiceChannel.getAudioManager().closeAudioConnection();
+	protected static void leaveVoiceChannel() {
+		Command.joiningVoiceChannel.getAudioManager().closeAudioConnection();
 	}
 
 	protected void setAudioSource() {
-		this.playerManager = new DefaultAudioPlayerManager();
+		Command.playerManager = new DefaultAudioPlayerManager();
+		playerManager.getConfiguration().setFilterHotSwapEnabled(true);
 		AudioSourceManagers.registerRemoteSources(playerManager);
 		AudioSourceManagers.registerLocalSource(playerManager);
 
